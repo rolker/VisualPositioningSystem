@@ -10,6 +10,24 @@ int main(int argc, char* argv[])
     cv::namedWindow("vps");
     
     cv::VideoCapture vc(device);
+    int w = vc.get(CV_CAP_PROP_FRAME_WIDTH);
+    int h = vc.get(CV_CAP_PROP_FRAME_HEIGHT);
+    
+    std::cout << w << "x" << h << std::endl;
+
+    vc.set(CV_CAP_PROP_FOURCC, CV_FOURCC('M', 'J', 'P', 'G'));
+    
+    w = 1920;
+    h = 1080;
+    
+    vc.set(CV_CAP_PROP_FRAME_WIDTH,w);
+    vc.set(CV_CAP_PROP_FRAME_HEIGHT,h);
+    
+    w = vc.get(CV_CAP_PROP_FRAME_WIDTH);
+    h = vc.get(CV_CAP_PROP_FRAME_HEIGHT);
+    
+    std::cout << w << "x" << h << std::endl;
+    
     
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
     
