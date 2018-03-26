@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
     w = 3280;
     h = 2464;
     
+    
     vc.set(CV_CAP_PROP_FRAME_WIDTH,w);
     vc.set(CV_CAP_PROP_FRAME_HEIGHT,h);
     
@@ -28,8 +29,12 @@ int main(int argc, char* argv[])
     
     std::cout << w << "x" << h << std::endl;
     
+    int tw = w/4;
+    int th = h/4;
     
-    cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
+    std::cout << tw << "x" << th << std::endl;
+    
+    cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_7X7_50);
     
     char keyboard = 0;
     while( keyboard != 'q' && keyboard != 27 )
@@ -46,14 +51,33 @@ int main(int argc, char* argv[])
         cv::aruco::drawDetectedMarkers(frame_out, markerCorners, markerIds);
         
         cv::Mat thumbnail;
-        resize(frame_out,thumbnail,cv::Size(320,240));
+        resize(frame_out,thumbnail,cv::Size(tw,th));
         imshow("vps",thumbnail);
         //imshow("vps",frame_out);
         
         if(!markerIds.empty())
         {
-            for (auto id: markerIds)
-                std::cout << id << ", ";
+            for (int i = 0; i < markerIds.size(); i++)
+            {
+                std::cout << markerIds[i] << " size: ";
+                cv::Point2f d1 = markerCorners[i][2] - markerCorners[i][0];
+                cv::Point2f d2 = markerCorners[i][3] - markerCorners[i][1];
+                
+                std::cout << (norm(d1)+norm(d2))/2.0 << " px, ";
+                
+                double a1 = atan2(markerCorners[i][0].y-markerCorners[i][3].y,markerCorners[i][0].x-markerCorners[i][3].x)*180.0/M_PI;
+                double a2 = atan2(markerCorners[i][1].y-markerCorners[i][2].y,markerCorners[i][1].x-markerCorners[i][2].x)*180.0/M_PI;
+                
+                double aa = (a1+a2)/2.0;
+                
+                aa = aa+90.0;
+                
+                if(aa < 0.0)
+                    aa += 360.0;
+                
+                
+                std::cout << " heading: " << aa << " degs, ";
+            }
             std::cout << std::endl;
         }
         
