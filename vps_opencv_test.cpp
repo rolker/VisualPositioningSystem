@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
 
     vc.set(CV_CAP_PROP_FOURCC, CV_FOURCC('M', 'J', 'P', 'G'));
     
-    w = 1920;
-    h = 1080;
+    w = 3280;
+    h = 2464;
     
     vc.set(CV_CAP_PROP_FRAME_WIDTH,w);
     vc.set(CV_CAP_PROP_FRAME_HEIGHT,h);
@@ -44,7 +44,18 @@ int main(int argc, char* argv[])
         cv::aruco::detectMarkers(frame_in, dictionary, markerCorners, markerIds);
 
         cv::aruco::drawDetectedMarkers(frame_out, markerCorners, markerIds);
-        imshow("vps",frame_out);
+        
+        cv::Mat thumbnail;
+        resize(frame_out,thumbnail,cv::Size(320,240));
+        imshow("vps",thumbnail);
+        //imshow("vps",frame_out);
+        
+        if(!markerIds.empty())
+        {
+            for (auto id: markerIds)
+                std::cout << id << ", ";
+            std::cout << std::endl;
+        }
         
         keyboard = (char)cv::waitKey(30);
     }
