@@ -19,6 +19,8 @@ int main(int argc, char* argv[])
     
     w = 3280;
     h = 2464;
+    w = 640;
+    h = 480;
     
     
     vc.set(CV_CAP_PROP_FRAME_WIDTH,w);
@@ -60,10 +62,11 @@ int main(int argc, char* argv[])
             for (int i = 0; i < markerIds.size(); i++)
             {
                 std::cout << markerIds[i] << " size: ";
-                cv::Point2f d1 = markerCorners[i][2] - markerCorners[i][0];
-                cv::Point2f d2 = markerCorners[i][3] - markerCorners[i][1];
-                
-                std::cout << (norm(d1)+norm(d2))/2.0 << " px, ";
+                double avgSize = (norm(markerCorners[i][0] - markerCorners[i][1])
+                                 +norm(markerCorners[i][1] - markerCorners[i][2])
+                                 +norm(markerCorners[i][2] - markerCorners[i][3])
+                                 +norm(markerCorners[i][3] - markerCorners[i][0]))/4.0;
+                std::cout << avgSize << " px, ";
                 
                 double a1 = atan2(markerCorners[i][0].y-markerCorners[i][3].y,markerCorners[i][0].x-markerCorners[i][3].x)*180.0/M_PI;
                 double a2 = atan2(markerCorners[i][1].y-markerCorners[i][2].y,markerCorners[i][1].x-markerCorners[i][2].x)*180.0/M_PI;
