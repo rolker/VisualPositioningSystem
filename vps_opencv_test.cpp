@@ -19,8 +19,8 @@ int main(int argc, char* argv[])
     
     w = 3280;
     h = 2464;
-    w = 640;
-    h = 480;
+    //w = 640;
+    //h = 480;
     
     
     vc.set(CV_CAP_PROP_FRAME_WIDTH,w);
